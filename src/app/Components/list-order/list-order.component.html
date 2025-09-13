@@ -1,0 +1,5 @@
+<div *ngFor="let order of orders">
+    <p>{{ order._id }} - {{ order.totalAmount }} - {{ order.status }}</p>
+    <button (click)="deleteOrder(order._id)">Delete Order</button>
+  </div>
+  

@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      
+    </div>
+    <div class="col-sm">
+      <div id="invoiceElement" class="invoice">
+        <div *ngIf="sale?.products">
+          
+        </div>
+        <div *ngIf="sale">
+          <h2>Receipt for {{ sale.customer.name }}</h2>
+          <p><strong>Date:</strong> {{ sale.date | date }}</p>
+          <p><strong>Total Amount:</strong> {{ sale.totalAmount | currency:'PKR':'symbol' }}</p>
+      
+          <h3>Products:</h3>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Items</th>
+                <th>qty</th>
+                <th>Price</th>
+                <th>Product Id</th>
+                <th>Total Price</th> <!-- Add total price column -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of sale.products">
+                <td>{{ product.product.name }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.product.price | currency:'PKR':'symbol' }}</td>
+                <td>{{ product.product.productId }}</td>
+
+                
+                <td>{{ (product.product.price * product.quantity) | currency:'PKR':'symbol' }}</td> <!-- Total price -->
+              </tr>
+            </tbody>
+          </table>
+          
+        </div>
+        <div *ngIf="!sale">
+          <p>Loading sale details...</p>
+        </div>
+      </div>
+      <button class="btn btn-primary" (click)="generateInvoicePdf()">Save Invoice as PDF</button>
+      <button class="btn btn-success" (click)="printInvoice()">Print Invoice</button>
+    </div>
+    <div class="col-sm">
+      
+    </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <table id="saleDatatable" class="table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Total Amount</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sale of sales">
+            <td>{{ sale.customer.name }}</td>
+            <td>
+              <ul>
+                <li *ngFor="let product of sale.products">{{ product.product.name }}</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li *ngFor="let product of sale.products">{{ product.quantity }}</li>
+              </ul>
+            </td>
+            <td>{{ sale.totalAmount | currency: 'PKR' }}</td>
+            <td class="date" (click)="navigateToInvoice(sale._id)">
+              {{ sale.date | date }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

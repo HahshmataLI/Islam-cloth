@@ -1,0 +1,163 @@
+<div (click)="toggleProfitVisibility()" style="cursor: pointer;">
+  <ng-container *ngIf="showProfit; else showIcon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye-off">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
+      <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
+      <path d="M3 3l18 18" />
+    </svg>
+  </ng-container>
+  <ng-template #showIcon>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+    </svg>
+  </ng-template>
+</div>
+
+<div class="container my-5 p-4 border rounded bg-light shadow-sm">
+  <h3 class="text-center mb-4">Add New Sale</h3>
+  <form [formGroup]="addSaleForm" (ngSubmit)="onSubmit()">
+    <!-- Customer and Category Row -->
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="customer" class="form-label">Customer</label>
+          <select id="customer" formControlName="customer" class="form-select">
+            <option value="" disabled>Select a customer</option>
+            <option *ngFor="let customer of customers" [value]="customer._id">{{ customer.name }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="category" class="form-label">Category</label>
+          <select id="category" formControlName="category" (change)="onCategoryChange($event)" class="form-select">
+            <option value="" disabled>Select a category</option>
+            <option *ngFor="let category of categories" [value]="category._id">{{ category.name }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Section -->
+    <div formArrayName="products" class="my-4">
+      <div *ngFor="let productControl of productControls.controls; let i = index" [formGroupName]="i" class="mb-4 p-3 border rounded bg-white shadow-sm">
+        <div class="row g-3">
+          <!-- Product and Quantity Row -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="product" class="form-label">Product</label>
+              <select id="product" formControlName="product" class="form-select" (change)="onProductChange(i)">
+                <option value="" disabled>Select a product</option>
+                <option *ngFor="let product of products" [value]="product._id">{{ product.name }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="quantity" class="form-label">Quantity</label>
+              <input id="quantity" formControlName="quantity" type="number" class="form-control" min="1" (input)="validateQuantity(i)">
+            </div>
+          </div>
+
+          <!-- Cost Price Display -->
+          <div *ngIf="showProfit" class="col-md-3">
+            <div class="form-group">
+              <label class="form-label">Cost Price</label>
+              <input type="text" formControlName="costPrice" class="form-control" readonly>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="stock" class="form-label">Available Stock</label>
+              <input id="stock" formControlName="stock" type="number" class="form-control" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- Price and Subtotal Row -->
+        <div class="row g-3 mt-2">
+          <div class="col-md-6">
+            <p class="mb-0"><strong>Price:</strong> {{ productControl.get('price')?.value | currency:'PKR':'symbol' }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <p class="mb-0"><strong>Subtotal:</strong> {{ productControl.get('subtotal')?.value | currency:'PKR':'symbol' }}</p>
+          </div>
+        </div>
+
+        <!-- Buttons Row -->
+        <div class="row g-3 mt-3">
+          <div class="col-md-12 text-end">
+            <button type="button" class="btn btn-danger me-2" (click)="removeProduct(i)">Remove</button>
+            <button type="button" class="btn btn-primary" (click)="addProduct()">Add Product</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Discount and Total Amount -->
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="discountType" class="form-label">Discount Type</label>
+          <select id="discountType" formControlName="discountType" class="form-select">
+            <option value="amount">Amount</option>
+            <option value="percentage">Percentage</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="discount" class="form-label">Discount</label>
+          <input
+            id="discount"
+            formControlName="discount"
+            type="number"
+            class="form-control"
+            min="0"
+            (input)="calculateTotalAmount()"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Amount -->
+    <div class="row g-3 mt-3">
+      <div class="col-md-6 offset-md-6">
+        <div class="form-group">
+          <label for="totalAmount" class="form-label">Total Amount</label>
+          <input
+            id="totalAmount"
+            formControlName="totalAmount"
+            type="number"
+            class="form-control"
+            readonly
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Profit -->
+    <div class="row g-3" *ngIf="showProfit">
+      <div class="col-md-6 offset-md-6">
+        <div class="form-group">
+          <label for="profit" class="form-label">Total Profit</label>
+          <input id="profit" formControlName="profit" type="number" class="form-control" readonly>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="row g-3 mt-4">
+      <div class="col-md-12 text-end">
+        <button type="submit" class="btn btn-success">Sale</button>
+      </div>
+    </div>
+  </form>
+</div>

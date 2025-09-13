@@ -1,0 +1,35 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          Login
+        </div>
+        <div class="card-body">
+          <form [formGroup]="loginForm">
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input type="email" class="form-control" id="email" formControlName="email">
+              <h5 class="text-danger" *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+                Please enter a valid email
+              </h5>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="password" formControlName="password">
+              <h5 class="text-danger" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+                Password must be at least 5 characters
+              </h5>
+            </div>
+            <button type="button" (click)="login()" class="btn btn-primary btn-block mt-2" [disabled]="loginForm.invalid">
+              Login
+            </button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-block mt-2">
+              Reset
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <h3 class="main_question">Add Product to Category</h3>
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label for="category">Select Category</label>
+            <select id="category" formControlName="categoryId" class="form-control">
+              <option value="" disabled selected>Please select category</option>
+              <option *ngFor="let category of categories" [value]="category._id">{{ category.name }}</option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="name">Product Name</label>
+            <input type="text" id="name" class="required form-control" formControlName="name">
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="description">Description</label>
+            <textarea id="description" class="required form-control" rows="1" formControlName="description"></textarea>
+          </div>
+
+          <div class="form-group col-md-4 mt-2">
+            <label for="price">Price</label>
+            <input type="number" id="price" class="required form-control" formControlName="price">
+          </div>
+
+          <div class="form-group col-md-4 mt-2">
+            <label for="costPrice">Cost Price</label>
+            <input type="number" id="costPrice" class="required form-control" formControlName="costPrice" min="0">
+          </div>
+
+          <div class="form-group col-md-4 mt-2">
+            <label for="stock">Stock</label>
+            <input type="number" id="stock" class="required form-control" formControlName="stock" min="1">
+          </div>
+
+          <div class="mt-3 mb-3">
+            <button type="submit" class="submit btn btn-primary" [disabled]="productForm.invalid">
+             add Product
+            </button>
+            
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

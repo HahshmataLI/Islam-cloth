@@ -1,0 +1,43 @@
+<div class="container-fluid">
+  <!-- Spinner -->
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Products List -->
+  <div *ngIf="!loading">
+    <h3 *ngIf="products.length > 0">Products for Category</h3>
+    <p *ngIf="products.length === 0">No products available for this category.</p>
+
+    <div class="row">
+      <div class="col-md-4" *ngFor="let product of products">
+        <div class="card mb-2">
+          <!-- Placeholder for image if needed in the future -->
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description }}</p>
+            <p>Cost Price: {{ product.costPrice | currency:'PKR':'symbol' }}</p>
+            <p class="card-text">Price: {{ product.price | currency:'PKR':'symbol' }}</p>
+            <p class="card-text">Stock: {{ product.stock }}</p>
+            <div class="d-flex justify-content-between">
+              <button
+                class="btn btn-outline-primary btn-sm"
+                (click)="editProduct(product._id)"
+              >
+                Edit
+              </button>
+              <button
+                class="btn btn-outline-danger btn-sm"
+                (click)="deleteProduct(product._id)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

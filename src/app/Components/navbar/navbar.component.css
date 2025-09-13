@@ -1,0 +1,13 @@
+.nav-item .nav-link.active {
+    background-color: #f8f9fa; /* Light background */
+    border-bottom: 2px solid var(--tblr-navbar-active-border-color); /* Active border */
+    font-weight: bold; /* Optional to highlight the active link */
+}
+.nav-item.active:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.25rem;
+    border-bottom: 2px solid var(--tblr-navbar-active-border-color); /* Adjust border color */
+}
